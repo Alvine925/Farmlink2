@@ -1,0 +1,5 @@
+{
+  "name": "AgriDirect Marketplace",
+  "description": "A direct marketplace connecting farmers with buyers to ensure transparency and better pricing in agricultural supply chains.",
+  "requestFramePermissions": ["geolocation"]
+}
