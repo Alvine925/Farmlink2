@@ -184,18 +184,20 @@ async function startServer() {
     });
   });
 
-  // Diagnostic route to check environment variable keys
-  app.get('/api/debug-env', (req, res) => {
-    const keys = Object.keys(process.env).filter(k => 
-      k.includes('BREVO') || k.includes('RESEND') || k.includes('GEMINI') || k.includes('VITE')
-    );
-    res.json({
-      envKeys: keys,
-      nodeEnv: process.env.NODE_ENV,
-      cwd: process.cwd(),
-      envFileExists: fs.existsSync(path.resolve(process.cwd(), '.env'))
+  // Diagnostic route — only available in development
+  if (process.env.NODE_ENV !== 'production') {
+    app.get('/api/debug-env', (req, res) => {
+      const keys = Object.keys(process.env).filter(k =>
+        k.includes('BREVO') || k.includes('RESEND') || k.includes('GEMINI') || k.includes('VITE')
+      );
+      res.json({
+        envKeys: keys,
+        nodeEnv: process.env.NODE_ENV,
+        cwd: process.cwd(),
+        envFileExists: fs.existsSync(path.resolve(process.cwd(), '.env'))
+      });
     });
-  });
+  }
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {

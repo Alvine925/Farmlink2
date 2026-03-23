@@ -33,7 +33,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
         return;
       }
 
-      const adminEmails = ['okongoalvine@gmail.com', 'otienoalvine925@gmail.com'];
+      const adminEmails = ((import.meta as any).env?.VITE_ADMIN_EMAILS || '')
+        .split(',')
+        .map((e: string) => e.trim())
+        .filter(Boolean);
       const finalRole = adminEmails.includes(user.email) ? 'admin' : selectedRole;
       
       await setDoc(doc(db, 'users', user.uid), {

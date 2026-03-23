@@ -30,11 +30,7 @@ import { Guides } from './pages/Guides';
 import { AnimatePresence } from 'motion/react';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
-const API_KEY =
-  process.env.GOOGLE_MAPS_PLATFORM_KEY ||
-  (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY ||
-  (globalThis as any).GOOGLE_MAPS_PLATFORM_KEY ||
-  '';
+const API_KEY = (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY || '';
 
 // Pages (to be implemented)
 const Home = () => {
