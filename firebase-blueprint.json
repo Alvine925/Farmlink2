@@ -50,7 +50,7 @@
         "farmerId": { "type": "string" },
         "items": { "type": "array" },
         "totalAmount": { "type": "number" },
-        "status": { "type": "string", "enum": ["pending", "accepted", "declined", "fulfilled", "completed"] },
+        "status": { "type": "string", "enum": ["pending", "accepted", "shipped", "declined", "received", "fulfilled", "completed"] },
         "deliveryMethod": { "type": "string" },
         "paymentMethod": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
@@ -98,6 +98,22 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["chatRoomId", "senderId", "text", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Product review from a buyer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "buyerPhoto": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "buyerId", "rating", "comment", "createdAt"]
     }
   },
   "firestore": {
@@ -124,6 +140,10 @@
     "/chatRooms/{roomId}/messages/{messageId}": {
       "schema": "ChatMessage",
       "description": "Messages within a chat room"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Product reviews"
     }
   }
 }

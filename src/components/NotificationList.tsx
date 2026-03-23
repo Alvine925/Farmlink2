@@ -18,6 +18,15 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
     }
   };
 
+  const markAllAsRead = async () => {
+    try {
+      const unread = notifications.filter(n => !n.read);
+      await Promise.all(unread.map(n => updateDoc(doc(db, 'notifications', n.id), { read: true })));
+    } catch (error) {
+      console.error("Error marking all as read:", error);
+    }
+  };
+
   const deleteNotification = async (id: string) => {
     try {
       await deleteDoc(doc(db, 'notifications', id));
@@ -42,6 +51,14 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
           <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">
             {notifications.filter(n => !n.read).length} New
           </span>
+        )}
+        {notifications.filter(n => !n.read).length > 0 && (
+          <button 
+            onClick={markAllAsRead}
+            className="text-xs text-emerald-700 font-bold hover:underline ml-auto"
+          >
+            Mark all as read
+          </button>
         )}
       </div>
 

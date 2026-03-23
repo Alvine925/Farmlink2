@@ -1,5 +1,5 @@
 {
-  "name": "AgriDirect Marketplace",
-  "description": "A direct marketplace connecting farmers with buyers to ensure transparency and better pricing in agricultural supply chains.",
+  "name": "FarmLink Marketplace",
+  "description": "A direct marketplace connecting farmers and retailers with buyers to ensure transparency, better pricing, and quality in agricultural supply chains, featuring a comprehensive review system.",
   "requestFramePermissions": ["geolocation"]
 }

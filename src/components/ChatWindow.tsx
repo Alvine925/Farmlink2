@@ -73,7 +73,22 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ recipientId, recipientNa
   }, [user, recipientId]);
 
   useEffect(() => {
-    if (!chatRoomId) return;
+    if (!chatRoomId || !user) return;
+
+    // Mark notifications for this chat as read
+    const markAsRead = async () => {
+      const q = query(
+        collection(db, 'notifications'),
+        where('userId', '==', user.uid),
+        where('relatedId', '==', chatRoomId),
+        where('read', '==', false)
+      );
+      const snapshot = await getDocs(q);
+      snapshot.docs.forEach(async (notificationDoc) => {
+        await updateDoc(doc(db, 'notifications', notificationDoc.id), { read: true });
+      });
+    };
+    markAsRead();
 
     const q = query(
       collection(db, 'chatRooms', chatRoomId, 'messages'),
@@ -104,6 +119,17 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ recipientId, recipientNa
       };
 
       await addDoc(collection(db, 'chatRooms', chatRoomId, 'messages'), messageData);
+
+      // Create notification for recipient
+      await addDoc(collection(db, 'notifications'), {
+        userId: recipientId,
+        title: 'New Message',
+        message: `You have a new message from ${user.displayName || 'a user'}`,
+        type: 'system',
+        relatedId: chatRoomId,
+        read: false,
+        createdAt: new Date().toISOString()
+      });
 
       // Update last message in chat room
       await updateDoc(doc(db, 'chatRooms', chatRoomId), {

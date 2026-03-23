@@ -36,6 +36,10 @@ service cloud.firestore {
       allow update: if (isOwner(userId) && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isVerified', 'role']))) || isAdmin();
     }
 
+    match /test/connection {
+      allow read: if true;
+    }
+
     match /products/{productId} {
       allow read: if true;
       allow create: if isFarmer() && request.resource.data.farmerId == request.auth.uid;
@@ -67,6 +71,14 @@ service cloud.firestore {
           request.auth.uid in get(/databases/$(database)/documents/chatRooms/$(roomId)).data.participants &&
           request.resource.data.senderId == request.auth.uid;
       }
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && 
+        request.resource.data.buyerId == request.auth.uid &&
+        request.resource.data.rating >= 1 && request.resource.data.rating <= 5;
+      allow update, delete: if isAuthenticated() && (resource.data.buyerId == request.auth.uid || isAdmin());
     }
   }
 }

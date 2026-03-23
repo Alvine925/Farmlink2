@@ -5,7 +5,7 @@ import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { UserRole } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
-import { User, Tractor, ShoppingBag, Mail, Lock, ArrowRight, X, ShieldCheck } from 'lucide-react';
+import { User, Tractor, ShoppingBag, Mail, Lock, ArrowRight, X, ShieldCheck, Store } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -16,24 +16,30 @@ interface AuthModalProps {
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMode = 'login' }) => {
   const [role, setRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(false);
-  const [isEmailMode, setIsEmailMode] = useState(false);
   const [isSignup, setIsSignup] = useState(initialMode === 'signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const navigate = useNavigate();
 
-  const handleAuthSuccess = async (user: any, selectedRole: UserRole) => {
+  const handleAuthSuccess = async (user: any, selectedRole: UserRole | null) => {
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     
     if (!userDoc.exists()) {
+      if (!selectedRole) {
+        setIsSignup(true);
+        setRole(null);
+        alert("Welcome to FarmLink! Please select whether you are a Farmer or a Buyer to complete your registration.");
+        return;
+      }
+
       const adminEmails = ['okongoalvine@gmail.com', 'otienoalvine925@gmail.com'];
       const finalRole = adminEmails.includes(user.email) ? 'admin' : selectedRole;
       
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName || displayName,
+        displayName: user.displayName || displayName || user.email.split('@')[0],
         photoURL: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`,
         role: finalRole,
         isVerified: finalRole === 'admin',
@@ -45,7 +51,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
   };
 
   const handleGoogleLogin = async () => {
-    if (!role) {
+    if (isSignup && !role) {
       alert("Please select your role first.");
       return;
     }
@@ -69,7 +75,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!role) {
+    if (isSignup && !role) {
       alert("Please select your role first.");
       return;
     }
@@ -82,7 +88,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
         await handleAuthSuccess(result.user, role);
       } else {
         const result = await signInWithEmailAndPassword(auth, email, password);
-        await handleAuthSuccess(result.user, role);
+        await handleAuthSuccess(result.user, null);
       }
     } catch (error: any) {
       console.error("Email auth error:", error);
@@ -129,166 +135,148 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
             </p>
           </div>
 
-          {!role ? (
-            <div className="space-y-6">
-              <p className="text-center font-bold text-stone-900">Select your role to continue</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button
-                  onClick={() => setRole('farmer')}
-                  className="p-6 rounded-2xl border-2 border-stone-100 hover:border-emerald-200 hover:bg-emerald-50 transition-all text-left flex flex-col gap-4 group"
+          <div className="space-y-6">
+            <AnimatePresence mode="wait">
+              {isSignup && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
                 >
-                  <div className="p-3 rounded-xl bg-stone-100 text-stone-600 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                    <Tractor className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg">I'm a Farmer</h3>
-                    <p className="text-xs text-stone-500">Sell directly to buyers.</p>
-                  </div>
-                </button>
+                  <label className="text-xs font-bold text-stone-400 uppercase tracking-wider ml-1 mb-3 block">
+                    I am a...
+                  </label>
+                  <div className="grid grid-cols-3 gap-4">
+                    <button
+                      onClick={() => setRole('farmer')}
+                      className={`p-4 rounded-2xl border-2 transition-all text-left flex flex-col gap-2 ${
+                        role === 'farmer' ? 'border-emerald-600 bg-emerald-50' : 'border-stone-100 hover:border-emerald-200'
+                      }`}
+                    >
+                      <div className={`p-2 rounded-lg w-fit ${role === 'farmer' ? 'bg-emerald-600 text-white' : 'bg-stone-100 text-stone-600'}`}>
+                        <Tractor className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-bold text-[10px] uppercase tracking-wider">Farmer</h3>
+                    </button>
 
-                <button
-                  onClick={() => setRole('buyer')}
-                  className="p-6 rounded-2xl border-2 border-stone-100 hover:border-emerald-200 hover:bg-emerald-50 transition-all text-left flex flex-col gap-4 group"
-                >
-                  <div className="p-3 rounded-xl bg-stone-100 text-stone-600 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                    <ShoppingBag className="w-6 h-6" />
+                    <button
+                      onClick={() => setRole('retailer')}
+                      className={`p-4 rounded-2xl border-2 transition-all text-left flex flex-col gap-2 ${
+                        role === 'retailer' ? 'border-emerald-600 bg-emerald-50' : 'border-stone-100 hover:border-emerald-200'
+                      }`}
+                    >
+                      <div className={`p-2 rounded-lg w-fit ${role === 'retailer' ? 'bg-emerald-600 text-white' : 'bg-stone-100 text-stone-600'}`}>
+                        <Store className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-bold text-[10px] uppercase tracking-wider">Retailer</h3>
+                    </button>
+
+                    <button
+                      onClick={() => setRole('buyer')}
+                      className={`p-4 rounded-2xl border-2 transition-all text-left flex flex-col gap-2 ${
+                        role === 'buyer' ? 'border-emerald-600 bg-emerald-50' : 'border-stone-100 hover:border-emerald-200'
+                      }`}
+                    >
+                      <div className={`p-2 rounded-lg w-fit ${role === 'buyer' ? 'bg-emerald-600 text-white' : 'bg-stone-100 text-stone-600'}`}>
+                        <ShoppingBag className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-bold text-[10px] uppercase tracking-wider">Buyer</h3>
+                    </button>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg">I'm a Buyer</h3>
-                    <p className="text-xs text-stone-500">Source fresh produce.</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <form onSubmit={handleEmailAuth} className="space-y-4">
+              {isSignup && (
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-stone-400 uppercase tracking-wider ml-1">Full Name</label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+                    <input 
+                      type="text"
+                      required
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      placeholder="John Doe"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    />
                   </div>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between bg-stone-50 p-3 rounded-2xl border border-stone-100">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-emerald-600 text-white">
-                    {role === 'farmer' ? <Tractor className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
-                  </div>
-                  <span className="font-bold text-sm capitalize">Continuing as {role}</span>
                 </div>
-                <button 
-                  onClick={() => setRole(null)}
-                  className="text-xs text-emerald-700 font-bold hover:underline"
-                >
-                  Change
-                </button>
+              )}
+              
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-stone-400 uppercase tracking-wider ml-1">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+                  <input 
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="john@example.com"
+                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  />
+                </div>
               </div>
 
-              <AnimatePresence mode="wait">
-                {!isEmailMode ? (
-                  <motion.div
-                    key="social"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    className="space-y-4"
-                  >
-                    <button
-                      onClick={handleGoogleLogin}
-                      disabled={loading}
-                      className="w-full bg-white text-stone-700 border border-stone-200 py-4 rounded-2xl font-bold text-lg hover:bg-stone-50 transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-3"
-                    >
-                      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-6 h-6" alt="Google" />
-                      Continue with Google
-                    </button>
-                    
-                    <button
-                      onClick={() => setIsEmailMode(true)}
-                      className="w-full bg-stone-900 text-white py-4 rounded-2xl font-bold text-lg hover:bg-stone-800 transition-all shadow-lg flex items-center justify-center gap-3"
-                    >
-                      <Mail className="w-5 h-5" />
-                      Continue with Email
-                    </button>
-                  </motion.div>
-                ) : (
-                  <motion.form
-                    key="email"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    onSubmit={handleEmailAuth}
-                    className="space-y-4"
-                  >
-                    {isSignup && (
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-stone-400 uppercase tracking-wider ml-1">Full Name</label>
-                        <div className="relative">
-                          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-                          <input 
-                            type="text"
-                            required
-                            value={displayName}
-                            onChange={(e) => setDisplayName(e.target.value)}
-                            placeholder="John Doe"
-                            className="w-full pl-12 pr-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none"
-                          />
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-stone-400 uppercase tracking-wider ml-1">Email Address</label>
-                      <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-                        <input 
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="john@example.com"
-                          className="w-full pl-12 pr-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none"
-                        />
-                      </div>
-                    </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-stone-400 uppercase tracking-wider ml-1">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+                  <input 
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  />
+                </div>
+              </div>
 
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-stone-400 uppercase tracking-wider ml-1">Password</label>
-                      <div className="relative">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-                        <input 
-                          type="password"
-                          required
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="••••••••"
-                          className="w-full pl-12 pr-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none"
-                        />
-                      </div>
-                    </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-emerald-700 text-white py-4 rounded-2xl font-bold text-lg hover:bg-emerald-800 transition-all shadow-lg flex items-center justify-center gap-2"
+              >
+                {loading ? 'Processing...' : (isSignup ? 'Create Account' : 'Sign In')}
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </form>
 
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-emerald-700 text-white py-4 rounded-2xl font-bold text-lg hover:bg-emerald-800 transition-all shadow-lg flex items-center justify-center gap-2"
-                    >
-                      {loading ? 'Processing...' : (isSignup ? 'Create Account' : 'Sign In')}
-                      <ArrowRight className="w-5 h-5" />
-                    </button>
-
-                    <div className="flex flex-col gap-2 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => setIsSignup(!isSignup)}
-                        className="text-stone-500 text-sm hover:text-emerald-700 transition-colors"
-                      >
-                        {isSignup ? 'Already have an account? Sign In' : "Don't have an account? Create one"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIsEmailMode(false)}
-                        className="text-stone-400 text-xs hover:text-stone-600 transition-colors"
-                      >
-                        Go back to social login
-                      </button>
-                    </div>
-                  </motion.form>
-                )}
-              </AnimatePresence>
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-stone-100"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-4 text-stone-400 font-bold tracking-widest">Or</span>
+              </div>
             </div>
-          )}
+
+            <button
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="w-full bg-white text-stone-700 border border-stone-200 py-4 rounded-2xl font-bold text-lg hover:bg-stone-50 transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-3"
+            >
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-6 h-6" alt="Google" />
+              Google Account
+            </button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSignup(!isSignup);
+                  setRole(null);
+                }}
+                className="text-stone-500 text-sm hover:text-emerald-700 transition-colors font-medium"
+              >
+                {isSignup ? 'Already have an account? Sign In' : "Don't have an account? Create one"}
+              </button>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>

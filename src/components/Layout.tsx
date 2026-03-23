@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { auth } from '../firebase';
-import { LogOut, User, ShoppingCart, Menu, X, Leaf } from 'lucide-react';
+import { LogOut, User, ShoppingCart, Menu, X, Leaf, Bell, MessageSquare, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuthModal } from '../context/AuthModalContext';
 import { AuthModal } from './AuthModal';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, profile } = useAuth();
@@ -14,6 +16,31 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const { isOpen, mode, openModal, closeModal } = useAuthModal();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [unreadMessages, setUnreadMessages] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!user) {
+      setUnreadMessages(0);
+      return;
+    }
+
+    // This is a bit complex because messages are in subcollections.
+    // A better way would be to have an unreadCount on the ChatRoom for each participant.
+    // For now, let's just listen to notifications of type 'message' if we had them,
+    // or just assume we'll use a simple query if we can.
+    // Actually, let's just use the 'notifications' collection which already exists.
+    const q = query(
+      collection(db, 'notifications'),
+      where('userId', '==', user.uid),
+      where('read', '==', false)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setUnreadMessages(snapshot.docs.length);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   const handleLogout = async () => {
     await auth.signOut();
@@ -28,7 +55,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <div className="flex items-center">
               <Link to="/" className="flex items-center gap-2 text-emerald-700 font-bold text-xl tracking-tight">
                 <Leaf className="w-6 h-6" />
-                <span>AgriDirect</span>
+                <span>FarmLink</span>
               </Link>
             </div>
 
@@ -42,6 +69,22 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   )}
                   <Link to="/dashboard" className="text-stone-600 hover:text-emerald-700 transition-colors font-medium">Dashboard</Link>
                   <div className="flex items-center gap-4 border-l border-stone-200 pl-8">
+                    <Link to="/messages" className="p-2 text-stone-600 hover:bg-stone-100 rounded-full transition-all relative">
+                      <MessageSquare className="w-5 h-5" />
+                      {unreadMessages > 0 && (
+                        <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+                          {unreadMessages}
+                        </span>
+                      )}
+                    </Link>
+                    <Link to="/wishlist" className="p-2 text-stone-600 hover:bg-stone-100 rounded-full transition-all relative">
+                      <Heart className="w-5 h-5" />
+                      {profile?.favorites && profile.favorites.length > 0 && (
+                        <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+                          {profile.favorites.length}
+                        </span>
+                      )}
+                    </Link>
                     <Link to="/cart" className="p-2 text-stone-600 hover:bg-stone-100 rounded-full transition-all relative">
                       <ShoppingCart className="w-5 h-5" />
                       {items.length > 0 && (
@@ -51,10 +94,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                       )}
                     </Link>
                     <div className="flex items-center gap-3">
-                      <div className="text-right">
+                      <Link to="/account" className="text-right hover:text-emerald-700 transition-colors">
                         <p className="text-sm font-semibold leading-none">{profile?.displayName || 'User'}</p>
                         <p className="text-xs text-stone-500 capitalize">{profile?.role || 'Buyer'}</p>
-                      </div>
+                      </Link>
                       <button onClick={handleLogout} className="p-2 text-stone-400 hover:text-red-600 rounded-full transition-all">
                         <LogOut className="w-5 h-5" />
                       </button>
@@ -105,6 +148,22 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                       <Link to="/admin" className="block px-3 py-2 text-stone-600 font-medium">Admin Panel</Link>
                     )}
                     <Link to="/dashboard" className="block px-3 py-2 text-stone-600 font-medium">Dashboard</Link>
+                    <Link to="/messages" className="block px-3 py-2 text-stone-600 font-medium flex justify-between items-center">
+                      <span>Messages</span>
+                      {unreadMessages > 0 && (
+                        <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          {unreadMessages}
+                        </span>
+                      )}
+                    </Link>
+                    <Link to="/wishlist" className="block px-3 py-2 text-stone-600 font-medium flex justify-between items-center">
+                      <span>Wishlist</span>
+                      {profile?.favorites && profile.favorites.length > 0 && (
+                        <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          {profile.favorites.length}
+                        </span>
+                      )}
+                    </Link>
                     <Link to="/cart" className="block px-3 py-2 text-stone-600 font-medium">Cart</Link>
                     <button onClick={handleLogout} className="block w-full text-left px-3 py-2 text-red-600 font-medium">Logout</button>
                   </>
@@ -146,7 +205,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-2 text-emerald-700 font-bold text-xl mb-4">
                 <Leaf className="w-6 h-6" />
-                <span>AgriDirect</span>
+                <span>FarmLink</span>
               </div>
               <p className="text-stone-500 max-w-sm">
                 Empowering farmers and buyers through a transparent, direct agricultural marketplace.
@@ -155,22 +214,24 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <div>
               <h4 className="font-bold mb-4">Platform</h4>
               <ul className="space-y-2 text-stone-500 text-sm">
-                <li><Link to="/marketplace">Marketplace</Link></li>
-                <li><Link to="/how-it-works">How it Works</Link></li>
-                <li><Link to="/pricing">Pricing</Link></li>
+                <li><Link to="/marketplace" className="hover:text-emerald-700 transition-colors">Marketplace</Link></li>
+                <li><Link to="/guides" className="hover:text-emerald-700 transition-colors">Platform Guides</Link></li>
+                <li><Link to="/how-it-works" className="hover:text-emerald-700 transition-colors">How it Works</Link></li>
+                <li><Link to="/pricing" className="hover:text-emerald-700 transition-colors">Pricing</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Support</h4>
               <ul className="space-y-2 text-stone-500 text-sm">
-                <li><Link to="/help">Help Center</Link></li>
-                <li><Link to="/contact">Contact Us</Link></li>
-                <li><Link to="/privacy">Privacy Policy</Link></li>
+                <li><Link to="/help" className="hover:text-emerald-700 transition-colors">Help Center</Link></li>
+                <li><Link to="/contact" className="hover:text-emerald-700 transition-colors">Contact Us</Link></li>
+                <li><Link to="/privacy" className="hover:text-emerald-700 transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-emerald-700 transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-stone-100 mt-12 pt-8 text-center text-stone-400 text-xs">
-            © 2026 AgriDirect Marketplace. All rights reserved.
+            © 2026 FarmLink Marketplace. All rights reserved.
           </div>
         </div>
       </footer>
