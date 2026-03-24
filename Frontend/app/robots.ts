@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/api/', '/login', '/signup'],
     },
-    sitemap: 'https://farmlink-marketplace.com/sitemap.xml',
+    sitemap: 'https://tellus-marketplace.com/sitemap.xml',
   }
 }

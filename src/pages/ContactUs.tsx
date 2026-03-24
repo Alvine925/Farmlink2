@@ -39,7 +39,7 @@ export const ContactUs: React.FC = () => {
       <section className="text-center space-y-4 max-w-2xl mx-auto py-12">
         <h1 className="text-4xl md:text-5xl font-bold text-stone-900">Get in Touch</h1>
         <p className="text-stone-500 text-lg leading-relaxed">
-          Have questions about FarmLink? Whether you're a farmer looking to sell or a buyer with questions, our team is here to help.
+          Have questions about Tellus? Whether you're a farmer looking to sell or a buyer with questions, our team is here to help.
         </p>
       </section>
 
@@ -56,7 +56,7 @@ export const ContactUs: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">Email Us</p>
-                  <p className="text-stone-900 font-medium">support@farmlink.com</p>
+                  <p className="text-stone-900 font-medium">support@tellus.com</p>
                   <p className="text-stone-500 text-sm">We respond within 24 hours.</p>
                 </div>
               </div>
@@ -78,7 +78,7 @@ export const ContactUs: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">Visit Us</p>
-                  <p className="text-stone-900 font-medium">123 FarmLink Way</p>
+                  <p className="text-stone-900 font-medium">123 Tellus Way</p>
                   <p className="text-stone-500 text-sm">Agriculture City, AC 12345</p>
                 </div>
               </div>

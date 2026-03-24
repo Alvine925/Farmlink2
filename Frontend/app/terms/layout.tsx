@@ -2,7 +2,7 @@ import { Metadata } from 'next'
  
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'Read the terms and conditions for using the FarmLink platform.',
+  description: 'Read the terms and conditions for using the Tellus platform.',
 }
  
 export default function TermsLayout({

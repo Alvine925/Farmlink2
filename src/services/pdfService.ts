@@ -9,7 +9,7 @@ export const exportOrderToPDF = (order: Order) => {
   // Header
   doc.setFontSize(22);
   doc.setTextColor(5, 150, 105); // emerald-600
-  doc.text('AgriDirect Order Invoice', 14, 22);
+  doc.text('Tellus Order Invoice', 14, 22);
   
   doc.setFontSize(10);
   doc.setTextColor(100);
@@ -88,7 +88,7 @@ export const exportOrderToPDF = (order: Order) => {
   // Footer
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Thank you for choosing AgriDirect - Connecting Farmers to You.', pageWidth / 2, 285, { align: 'center' });
+  doc.text('Thank you for choosing Tellus - Connecting Farmers to You.', pageWidth / 2, 285, { align: 'center' });
 
   doc.save(`Order_${order.id.slice(-8).toUpperCase()}.pdf`);
 };

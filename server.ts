@@ -117,7 +117,7 @@ async function startServer() {
     console.log(`[Email Request] Subject: "${subject}" To: ${to}`);
     
     const senderEmail = process.env.BREVO_SENDER_EMAIL || process.env.RESEND_SENDER_EMAIL;
-    const senderName = process.env.BREVO_SENDER_NAME || process.env.RESEND_SENDER_NAME || 'AgriDirect';
+    const senderName = process.env.BREVO_SENDER_NAME || process.env.RESEND_SENDER_NAME || 'Tellus';
 
     console.log(`[Email Diagnostics] BREVO_API_KEY: ${apiKey ? 'Present' : 'Missing'}, SENDER_EMAIL: ${senderEmail || 'Missing'}`);
 

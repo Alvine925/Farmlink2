@@ -50,7 +50,7 @@ export const OrdersTab: React.FC<OrdersTabProps> = ({
               <h2 className="font-bold text-lg">Manage Orders</h2>
               <div className="flex items-center gap-3">
                 <button 
-                  onClick={() => exportOrdersToCSV(filteredOrders, `FarmLink_Orders_${new Date().toISOString().split('T')[0]}.csv`)}
+                  onClick={() => exportOrdersToCSV(filteredOrders, `Tellus_Orders_${new Date().toISOString().split('T')[0]}.csv`)}
                   className="flex items-center gap-2 px-4 py-2 bg-stone-100 text-stone-700 rounded-xl text-xs font-bold hover:bg-stone-200 transition-colors"
                   title="Export to CSV"
                 >

@@ -421,7 +421,7 @@ export const Cart: React.FC = () => {
           </button>
           
           <p className="text-center text-stone-400 text-[10px] mt-4">
-            Secure checkout powered by FarmLink Payments.
+            Secure checkout powered by Tellus Payments.
           </p>
         </div>
       </div>

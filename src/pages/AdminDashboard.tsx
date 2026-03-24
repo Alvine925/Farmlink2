@@ -422,7 +422,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold text-stone-900">All Platform Orders</h2>
                 <button 
-                  onClick={() => exportOrdersToPDF(orders, 'FarmLink Platform Orders')}
+                  onClick={() => exportOrdersToPDF(orders, 'Tellus Platform Orders')}
                   className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition-colors shadow-sm"
                 >
                   <FileText className="w-4 h-4" />

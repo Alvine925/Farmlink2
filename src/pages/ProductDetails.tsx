@@ -470,7 +470,7 @@ export const ProductDetails: React.FC = () => {
 
             <div className="flex items-center gap-3 text-sm text-stone-600 pt-4 border-t border-stone-200">
               <ShieldCheck className="w-5 h-5 text-emerald-600" />
-              <span>Quality guaranteed by FarmLink Verified Farmers</span>
+              <span>Quality guaranteed by Tellus Verified Farmers</span>
             </div>
             <div className="flex items-center gap-3 text-sm text-stone-600">
               <Truck className="w-5 h-5 text-emerald-600" />

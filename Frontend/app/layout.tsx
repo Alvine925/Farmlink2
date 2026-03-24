@@ -8,39 +8,39 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "FarmLink - Direct Agricultural Marketplace",
-    template: "%s | FarmLink"
+    default: "Tellus - Direct Agricultural Marketplace",
+    template: "%s | Tellus"
   },
   description: "Empowering farmers and buyers through a transparent, direct agricultural marketplace. Buy fresh produce directly from local farms.",
-  keywords: ["agriculture", "marketplace", "farmers", "fresh produce", "direct-to-consumer", "FarmLink"],
-  authors: [{ name: "FarmLink Team" }],
-  creator: "FarmLink",
-  metadataBase: new URL("https://farmlink-marketplace.com"),
+  keywords: ["agriculture", "marketplace", "farmers", "fresh produce", "direct-to-consumer", "Tellus"],
+  authors: [{ name: "Tellus Team" }],
+  creator: "Tellus",
+  metadataBase: new URL("https://tellus-marketplace.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://farmlink-marketplace.com",
-    siteName: "FarmLink",
-    title: "FarmLink - Direct Agricultural Marketplace",
+    url: "https://tellus-marketplace.com",
+    siteName: "Tellus",
+    title: "Tellus - Direct Agricultural Marketplace",
     description: "Empowering farmers and buyers through a transparent, direct agricultural marketplace.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "FarmLink Marketplace",
+        alt: "Tellus Marketplace",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "FarmLink - Direct Agricultural Marketplace",
+    title: "Tellus - Direct Agricultural Marketplace",
     description: "Empowering farmers and buyers through a transparent, direct agricultural marketplace.",
     images: ["/og-image.jpg"],
-    creator: "@farmlink",
+    creator: "@tellus",
   },
   robots: {
     index: true,
@@ -69,7 +69,7 @@ export default function RootLayout({
               <div className="flex items-center">
                 <Link href="/" className="flex items-center gap-2 text-emerald-700 font-bold text-xl tracking-tight">
                   <Leaf className="w-6 h-6" />
-                  <span>FarmLink</span>
+                  <span>Tellus</span>
                 </Link>
               </div>
 
@@ -105,7 +105,7 @@ export default function RootLayout({
               <div className="col-span-1 md:col-span-2">
                 <div className="flex items-center gap-2 text-emerald-700 font-bold text-xl mb-4">
                   <Leaf className="w-6 h-6" />
-                  <span>FarmLink</span>
+                  <span>Tellus</span>
                 </div>
                 <p className="text-stone-500 max-w-sm">
                   Empowering farmers and buyers through a transparent, direct agricultural marketplace.
@@ -129,7 +129,7 @@ export default function RootLayout({
               </div>
             </div>
             <div className="border-t border-stone-100 mt-12 pt-8 text-center text-stone-400 text-xs">
-              © 2026 FarmLink Marketplace. All rights reserved.
+              © 2026 Tellus Marketplace. All rights reserved.
             </div>
           </div>
         </footer>

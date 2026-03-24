@@ -7,7 +7,7 @@ const categories = [
     id: 'getting-started',
     title: 'Getting Started',
     icon: BookOpen,
-    description: 'Learn the basics of using FarmLink as a buyer or farmer.',
+    description: 'Learn the basics of using Tellus as a buyer or farmer.',
     articles: [
       'How to create an account',
       'Verifying your identity',
@@ -148,7 +148,7 @@ export const HelpCenter: React.FC = () => {
           </div>
           <div className="space-y-4">
             {[
-              { q: "Is FarmLink available in my area?", a: "FarmLink is currently expanding across several regions. You can check availability by entering your location in the marketplace filters." },
+              { q: "Is Tellus available in my area?", a: "Tellus is currently expanding across several regions. You can check availability by entering your location in the marketplace filters." },
               { q: "How do I know if a farmer is verified?", a: "Verified farmers have a green shield icon next to their name. This means we've verified their identity and farming certifications." },
               { q: "What happens if my produce arrives damaged?", a: "We have a comprehensive refund policy. Simply take a photo of the damaged goods and contact our support team within 24 hours of delivery." }
             ].map((faq, i) => (

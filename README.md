@@ -1,6 +1,6 @@
-# FarmLink
+# Tellus
 
-FarmLink is a comprehensive digital marketplace connecting farmers directly with buyers and retailers. Our platform streamlines the agricultural supply chain, ensuring fresh produce reaches consumers while providing farmers with better market access and fair pricing.
+Tellus is a comprehensive digital marketplace connecting farmers directly with buyers and retailers. Our platform streamlines the agricultural supply chain, ensuring fresh produce reaches consumers while providing farmers with better market access and fair pricing.
 
 ## Features
 

@@ -55,7 +55,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <div className="flex items-center">
               <a href="/" className="flex items-center gap-2 text-emerald-700 font-bold text-xl tracking-tight">
                 <Leaf className="w-6 h-6" />
-                <span>FarmLink</span>
+                <span>Tellus</span>
               </a>
             </div>
 
@@ -206,7 +206,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-2 text-emerald-700 font-bold text-xl mb-4">
                 <Leaf className="w-6 h-6" />
-                <span>FarmLink</span>
+                <span>Tellus</span>
               </div>
               <p className="text-stone-500 max-w-sm">
                 Empowering farmers and buyers through a transparent, direct agricultural marketplace.
@@ -232,7 +232,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
           </div>
           <div className="border-t border-stone-100 mt-12 pt-8 text-center text-stone-400 text-xs">
-            © 2026 FarmLink Marketplace. All rights reserved.
+            © 2026 Tellus Marketplace. All rights reserved.
           </div>
         </div>
       </footer>

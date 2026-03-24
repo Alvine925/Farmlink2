@@ -2,7 +2,7 @@ import { Metadata } from 'next'
  
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Learn how FarmLink collects, uses, and protects your personal information.',
+  description: 'Learn how Tellus collects, uses, and protects your personal information.',
 }
  
 export default function PrivacyLayout({

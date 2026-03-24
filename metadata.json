@@ -1,5 +1,5 @@
 {
-  "name": "FarmLink Marketplace",
-  "description": "A direct marketplace connecting farmers and retailers with buyers to ensure transparency, better pricing, and quality in agricultural supply chains, featuring a comprehensive review system.",
+  "name": "Tellus Marketplace",
+  "description": "Tellus is a direct agricultural marketplace connecting farmers and retailers with buyers to ensure transparency, better pricing, and quality in supply chains.",
   "requestFramePermissions": ["geolocation"]
 }

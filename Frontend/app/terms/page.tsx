@@ -9,12 +9,12 @@ export default function TermsOfService() {
     {
       title: '1. Acceptance of Terms',
       icon: CheckCircle2,
-      content: 'By accessing or using the FarmLink platform, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.'
+      content: 'By accessing or using the Tellus platform, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.'
     },
     {
       title: '2. Use License',
       icon: FileText,
-      content: 'Permission is granted to temporarily download one copy of the materials (information or software) on FarmLink\'s website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title.'
+      content: 'Permission is granted to temporarily download one copy of the materials (information or software) on Tellus\'s website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title.'
     },
     {
       title: '3. User Accounts',
@@ -24,7 +24,7 @@ export default function TermsOfService() {
     {
       title: '4. Farmer and Buyer Responsibilities',
       icon: Scale,
-      content: 'Farmers are responsible for the accuracy of their product listings and the quality of their products. Buyers are responsible for providing accurate shipping information and making timely payments. FarmLink acts as a facilitator and is not responsible for the actual transaction between farmers and buyers.'
+      content: 'Farmers are responsible for the accuracy of their product listings and the quality of their products. Buyers are responsible for providing accurate shipping information and making timely payments. Tellus acts as a facilitator and is not responsible for the actual transaction between farmers and buyers.'
     },
     {
       title: '5. Prohibited Conduct',
@@ -34,17 +34,17 @@ export default function TermsOfService() {
     {
       title: '6. Limitation of Liability',
       icon: Gavel,
-      content: 'In no event shall FarmLink or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on FarmLink\'s website.'
+      content: 'In no event shall Tellus or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Tellus\'s website.'
     },
     {
       title: '7. Governing Law',
       icon: Info,
-      content: 'These terms and conditions are governed by and construed in accordance with the laws of the jurisdiction in which FarmLink operates and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.'
+      content: 'These terms and conditions are governed by and construed in accordance with the laws of the jurisdiction in which Tellus operates and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.'
     },
     {
       title: '8. Changes to Terms',
       icon: Mail,
-      content: 'FarmLink reserves the right, at its sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days\' notice prior to any new terms taking effect.'
+      content: 'Tellus reserves the right, at its sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days\' notice prior to any new terms taking effect.'
     }
   ];
 
@@ -61,7 +61,7 @@ export default function TermsOfService() {
         </p>
         <div className="max-w-2xl mx-auto pt-4">
           <p className="text-stone-600 leading-relaxed">
-            Welcome to FarmLink. These terms and conditions outline the rules and regulations for the use of our platform. By accessing this website, we assume you accept these terms and conditions.
+            Welcome to Tellus. These terms and conditions outline the rules and regulations for the use of our platform. By accessing this website, we assume you accept these terms and conditions.
           </p>
         </div>
       </section>

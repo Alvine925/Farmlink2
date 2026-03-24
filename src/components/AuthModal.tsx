@@ -29,7 +29,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
       if (!selectedRole) {
         setIsSignup(true);
         setRole(null);
-        alert("Welcome to FarmLink! Please select your role to complete your registration.");
+        alert("Welcome to Tellus! Please select your role to complete your registration.");
         return;
       }
 

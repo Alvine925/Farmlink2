@@ -56,11 +56,11 @@ const getEmailTemplate = (content: string) => `
 </head>
 <body>
   <div class="container">
-    <img src="${LOGO_URL}" alt="FarmLink" class="logo">
-    <span class="brand">FarmLink</span>
+    <img src="${LOGO_URL}" alt="Tellus" class="logo">
+    <span class="brand">Tellus</span>
     <div class="content">${content}</div>
     <div class="footer">
-      &copy; 2026 FarmLink Marketplace. All rights reserved.<br>
+      &copy; 2026 Tellus Marketplace. All rights reserved.<br>
       Empowering farmers and buyers through direct trade.
     </div>
   </div>
@@ -97,7 +97,7 @@ export const sendOrderNotificationToFarmer = async (farmerEmail: string, orderId
   const subject = `New Order Received! (#${orderId.slice(0, 6)})`;
   const text = `Hello,
 
-You have received a new order on FarmLink!
+You have received a new order on Tellus!
 
 Order ID: #${orderId.slice(0, 6)}
 Buyer: ${buyerName}
@@ -106,7 +106,7 @@ Total Amount: $${amount.toFixed(2)}
 Please log in to your dashboard to view the full details and accept the order.
 
 Best regards,
-The FarmLink Team`;
+The Tellus Team`;
 
   return sendEmail({ to: farmerEmail, subject, text });
 };
@@ -128,7 +128,7 @@ New Status: ${status.toUpperCase()}
 You can track your order progress in your dashboard.
 
 Best regards,
-The FarmLink Team`;
+The Tellus Team`;
 
   return sendEmail({ to: buyerEmail, subject, text });
 };
@@ -137,7 +137,7 @@ export const sendOrderConfirmationToBuyer = async (buyerEmail: string, orderId: 
   const subject = `Order Confirmation: #${orderId.slice(0, 6)}`;
   const text = `Hello,
 
-Thank you for your order on FarmLink!
+Thank you for your order on Tellus!
 
 Order ID: #${orderId.slice(0, 6)}
 Farmer: ${farmerName}
@@ -148,7 +148,7 @@ Your order has been sent to the farmer for approval. You will receive another up
 You can track your order progress in your dashboard.
 
 Best regards,
-The FarmLink Team`;
+The Tellus Team`;
 
   return sendEmail({ to: buyerEmail, subject, text });
 };

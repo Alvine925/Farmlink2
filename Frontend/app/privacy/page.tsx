@@ -44,7 +44,7 @@ export default function PrivacyPolicy() {
     {
       title: '8. Contact Us',
       icon: Mail,
-      content: 'If you have any questions about this Privacy Statement, please contact us at privacy@farmlink.com or through our contact page.'
+      content: 'If you have any questions about this Privacy Statement, please contact us at privacy@tellus.com or through our contact page.'
     }
   ];
 
@@ -61,7 +61,7 @@ export default function PrivacyPolicy() {
         </p>
         <div className="max-w-2xl mx-auto pt-4">
           <p className="text-stone-600 leading-relaxed">
-            At FarmLink, we take your privacy seriously. This policy describes how we collect, use, and protect your personal information when you use our platform.
+            At Tellus, we take your privacy seriously. This policy describes how we collect, use, and protect your personal information when you use our platform.
           </p>
         </div>
       </section>

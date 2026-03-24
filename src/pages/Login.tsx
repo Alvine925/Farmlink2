@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
       if (!selectedRole) {
         setIsSignup(true);
         setRole(null);
-        alert("Welcome to FarmLink! Please select whether you are a Farmer or a Buyer to complete your registration.");
+        alert("Welcome to Tellus! Please select whether you are a Farmer or a Buyer to complete your registration.");
         return;
       }
 
@@ -114,7 +114,7 @@ export const Login: React.FC = () => {
             {isSignup ? 'Create Account' : 'Welcome Back'}
           </h2>
           <p className="text-stone-500">
-            {isSignup ? 'Join the direct-from-farm marketplace' : 'Sign in to your FarmLink account'}
+            {isSignup ? 'Join the direct-from-farm marketplace' : 'Sign in to your Tellus account'}
           </p>
         </div>
 
@@ -248,7 +248,7 @@ export const Login: React.FC = () => {
         </div>
 
         <p className="text-center text-stone-400 text-[10px] mt-8 uppercase tracking-widest">
-          Secure Authentication by FarmLink
+          Secure Authentication by Tellus
         </p>
       </motion.div>
     </div>

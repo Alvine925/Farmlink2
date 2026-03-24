@@ -4,13 +4,13 @@ export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "FarmLink",
-    "url": "https://farmlink-marketplace.com",
-    "logo": "https://farmlink-marketplace.com/logo.png",
+    "name": "Tellus",
+    "url": "https://tellus-marketplace.com",
+    "logo": "https://tellus-marketplace.com/logo.png",
     "description": "Direct agricultural marketplace connecting farmers and buyers.",
     "sameAs": [
-      "https://twitter.com/farmlink",
-      "https://facebook.com/farmlink"
+      "https://twitter.com/tellus",
+      "https://facebook.com/tellus"
     ]
   };
 
