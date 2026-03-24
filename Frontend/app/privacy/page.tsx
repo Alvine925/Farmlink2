@@ -1,8 +1,10 @@
+"use client";
+
 import React from 'react';
 import { ShieldCheck, Lock, Eye, FileText, UserCheck, Bell, Globe, Mail } from 'lucide-react';
 import { motion } from 'motion/react';
 
-export const PrivacyPolicy: React.FC = () => {
+export default function PrivacyPolicy() {
   const sections = [
     {
       title: '1. Information We Collect',
@@ -99,4 +101,4 @@ export const PrivacyPolicy: React.FC = () => {
       </section>
     </div>
   );
-};
+}

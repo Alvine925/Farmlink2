@@ -29,15 +29,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
       if (!selectedRole) {
         setIsSignup(true);
         setRole(null);
-        alert("Welcome to FarmLink! Please select whether you are a Farmer or a Buyer to complete your registration.");
+        alert("Welcome to FarmLink! Please select your role to complete your registration.");
         return;
       }
 
-      const adminEmails = ((import.meta as any).env?.VITE_ADMIN_EMAILS || '')
-        .split(',')
-        .map((e: string) => e.trim())
-        .filter(Boolean);
-      const finalRole = adminEmails.includes(user.email) ? 'admin' : selectedRole;
+      const finalRole = selectedRole;
       
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
@@ -45,7 +41,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialMo
         displayName: user.displayName || displayName || user.email.split('@')[0],
         photoURL: user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`,
         role: finalRole,
-        isVerified: finalRole === 'admin',
+        isVerified: false,
         createdAt: new Date().toISOString()
       });
     }

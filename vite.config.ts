@@ -5,8 +5,9 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  // No manual `define` needed — use VITE_GOOGLE_MAPS_PLATFORM_KEY in .env
-  // and access it via import.meta.env.VITE_GOOGLE_MAPS_PLATFORM_KEY in code.
+  define: {
+    'process.env.GOOGLE_MAPS_PLATFORM_KEY': JSON.stringify(process.env.GOOGLE_MAPS_PLATFORM_KEY || '')
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),

@@ -1,8 +1,10 @@
+"use client";
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { BookOpen, User, Sprout, ShieldCheck, CreditCard, Truck, MessageSquare, Star, ArrowRight } from 'lucide-react';
 
-export const Guides: React.FC = () => {
+export default function Guides() {
   const farmerGuides = [
     {
       title: 'Getting Started as a Farmer',
@@ -215,4 +217,4 @@ export const Guides: React.FC = () => {
       </div>
     </div>
   );
-};
+}

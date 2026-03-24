@@ -202,7 +202,7 @@ export const SellerProfile: React.FC = () => {
                 <div className="flex items-center gap-2 mb-1">
                   <h1 className="text-3xl md:text-4xl font-bold">{businessDisplayName}</h1>
                   {seller.isVerified && (
-                    <ShieldCheck className="w-8 h-8 text-emerald-400 drop-shadow-lg" title={`Verified ${isFarmer ? 'Farmer' : 'Retailer'}`} />
+                    <ShieldCheck className="w-8 h-8 text-emerald-400 drop-shadow-lg" aria-label={`Verified ${isFarmer ? 'Farmer' : 'Retailer'}`} />
                   )}
                 </div>
                 <div className="flex items-center gap-2 text-emerald-100">

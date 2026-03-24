@@ -5,6 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { Resend } from 'resend';
 import fs from 'fs';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { spawn } from 'child_process';
 
 // Dynamically import Brevo to handle potential ESM/CJS issues and avoid type errors
 let Brevo: any;
@@ -29,6 +31,21 @@ if (fs.existsSync(envPath)) {
 async function startServer() {
   const app = express();
   const PORT = 3000;
+  const NEXT_PORT = 3001;
+
+  // Start Next.js dev server in development
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('Starting Next.js dev server on port', NEXT_PORT);
+    const nextDev = spawn('npm', ['run', 'dev'], {
+      cwd: path.join(process.cwd(), 'Frontend'),
+      stdio: 'inherit',
+      shell: true
+    });
+
+    nextDev.on('error', (err) => {
+      console.error('Failed to start Next.js dev server:', err);
+    });
+  }
 
   app.use(express.json());
 
@@ -184,18 +201,37 @@ async function startServer() {
     });
   });
 
-  // Diagnostic route — only available in development
+  // Diagnostic route to check environment variable keys
+  app.get('/api/debug-env', (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(403).json({ error: 'Forbidden in production' });
+    }
+    const keys = Object.keys(process.env).filter(k => 
+      k.includes('BREVO') || k.includes('RESEND') || k.includes('GEMINI') || k.includes('VITE')
+    );
+    res.json({
+      envKeys: keys,
+      nodeEnv: process.env.NODE_ENV,
+      cwd: process.cwd(),
+      envFileExists: fs.existsSync(path.resolve(process.cwd(), '.env'))
+    });
+  });
+
+  // Proxy landing pages to Next.js in development
   if (process.env.NODE_ENV !== 'production') {
-    app.get('/api/debug-env', (req, res) => {
-      const keys = Object.keys(process.env).filter(k =>
-        k.includes('BREVO') || k.includes('RESEND') || k.includes('GEMINI') || k.includes('VITE')
-      );
-      res.json({
-        envKeys: keys,
-        nodeEnv: process.env.NODE_ENV,
-        cwd: process.cwd(),
-        envFileExists: fs.existsSync(path.resolve(process.cwd(), '.env'))
-      });
+    const landingPages = ['/', '/privacy', '/terms', '/guides', '/_next', '/favicon.ico'];
+    const nextProxy = createProxyMiddleware({
+      target: `http://localhost:${NEXT_PORT}`,
+      changeOrigin: true,
+      ws: true,
+    });
+
+    app.use((req, res, next) => {
+      const isLandingPage = landingPages.some(path => req.path === path || req.path.startsWith('/_next'));
+      if (isLandingPage) {
+        return nextProxy(req, res, next);
+      }
+      next();
     });
   }
 
@@ -207,7 +243,28 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
+    // Production serving logic
     const distPath = path.join(process.cwd(), 'dist');
+    const nextOutPath = path.join(process.cwd(), 'Frontend', 'out');
+
+    // Serve Next.js static files for landing pages
+    const landingPages = ['/', '/privacy', '/terms', '/guides'];
+    app.use((req, res, next) => {
+      const isLandingPage = landingPages.some(p => req.path === p || req.path === `${p}.html`);
+      if (isLandingPage) {
+        const fileName = req.path === '/' ? 'index.html' : `${req.path.slice(1)}.html`;
+        const filePath = path.join(nextOutPath, fileName);
+        if (fs.existsSync(filePath)) {
+          return res.sendFile(filePath);
+        }
+      }
+      next();
+    });
+
+    // Serve Next.js static assets (_next)
+    app.use('/_next', express.static(path.join(nextOutPath, '_next')));
+
+    // Serve Vite app for everything else
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));

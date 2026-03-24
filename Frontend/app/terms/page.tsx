@@ -1,8 +1,10 @@
+"use client";
+
 import React from 'react';
 import { FileText, Scale, UserCheck, AlertCircle, CheckCircle2, Info, Gavel, Mail } from 'lucide-react';
 import { motion } from 'motion/react';
 
-export const TermsOfService: React.FC = () => {
+export default function TermsOfService() {
   const sections = [
     {
       title: '1. Acceptance of Terms',
@@ -99,4 +101,4 @@ export const TermsOfService: React.FC = () => {
       </section>
     </div>
   );
-};
+}

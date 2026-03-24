@@ -23,42 +23,20 @@ import { OrderDetails } from './pages/OrderDetails';
 import { Wishlist } from './pages/Wishlist';
 import { HelpCenter } from './pages/HelpCenter';
 import { ContactUs } from './pages/ContactUs';
-import { PrivacyPolicy } from './pages/PrivacyPolicy';
-import { TermsOfService } from './pages/TermsOfService';
 import { Account } from './pages/Account';
-import { Guides } from './pages/Guides';
 import { AnimatePresence } from 'motion/react';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
-const API_KEY = (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY || '';
+const API_KEY =
+  import.meta.env.VITE_GOOGLE_MAPS_PLATFORM_KEY ||
+  '';
 
-// Pages (to be implemented)
+// Landing pages are now handled by the Next.js frontend in /Frontend
 const Home = () => {
-  const { openModal } = useAuthModal();
-  const navigate = useNavigate();
-
-  return (
-    <div className="text-center py-20">
-      <h1 className="text-5xl font-bold tracking-tight text-stone-900 mb-6">Direct from Farm to Your Table</h1>
-      <p className="text-xl text-stone-600 mb-10 max-w-2xl mx-auto">
-        Connect directly with local farmers, get better prices, and ensure the highest quality produce for your business or home.
-      </p>
-      <div className="flex justify-center gap-4">
-        <button 
-          onClick={() => navigate('/marketplace')}
-          className="bg-emerald-700 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-emerald-800 transition-all shadow-lg"
-        >
-          Browse Marketplace
-        </button>
-        <button 
-          onClick={() => openModal('signup')}
-          className="bg-white text-stone-900 border border-stone-200 px-8 py-3 rounded-full font-bold text-lg hover:bg-stone-50 transition-all"
-        >
-          Sell Your Produce
-        </button>
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    window.location.href = '/';
+  }, []);
+  return null;
 };
 
 const Dashboard = () => {
@@ -93,10 +71,7 @@ const AppContent = () => {
           <Route path="/order/:orderId" element={<OrderDetails />} />
           <Route path="/help" element={<HelpCenter />} />
           <Route path="/contact" element={<ContactUs />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfService />} />
           <Route path="/account" element={<Account />} />
-          <Route path="/guides" element={<Guides />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Layout>

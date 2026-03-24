@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+.rich-text-editor .ql-toolbar {
+  @apply rounded-t-xl border-stone-200 bg-stone-50;
+}
+
+.rich-text-editor .ql-container {
+  @apply rounded-b-xl border-stone-200 bg-stone-50 min-h-[200px] text-base;
+}
+
+.rich-text-editor .ql-editor {
+  @apply min-h-[200px] text-stone-700;
+}
+
+.rich-text-editor .ql-editor.ql-blank::before {
+  @apply text-stone-400 font-normal not-italic;
+}
+
+.rich-text-editor .ql-snow.ql-toolbar button:hover,
+.rich-text-editor .ql-snow .ql-toolbar button:hover,
+.rich-text-editor .ql-snow.ql-toolbar button:focus,
+.rich-text-editor .ql-snow .ql-toolbar button:focus,
+.rich-text-editor .ql-snow.ql-toolbar button.ql-active,
+.rich-text-editor .ql-snow .ql-toolbar button.ql-active,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-label:hover,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-label:hover,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-item:hover,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-item:hover,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  @apply text-emerald-600;
+}
+
+.rich-text-editor .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.rich-text-editor .ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.rich-text-editor .ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
+.rich-text-editor .ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+  @apply stroke-emerald-600;
+}
+
+.rich-text-editor .ql-snow.ql-toolbar button.ql-active .ql-fill,
+.rich-text-editor .ql-snow .ql-toolbar button.ql-active .ql-fill,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.rich-text-editor .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.rich-text-editor .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill {
+  @apply fill-emerald-600;
+}
+
+/* Rendered Rich Text Content Styling */
+.detailed-description h1 {
+  @apply text-2xl font-bold text-stone-900 mb-4 mt-6;
+}
+
+.detailed-description h2 {
+  @apply text-xl font-bold text-stone-900 mb-3 mt-5;
+}
+
+.detailed-description p {
+  @apply mb-4 leading-relaxed;
+}
+
+.detailed-description ul {
+  @apply list-disc list-inside mb-4 space-y-1;
+}
+
+.detailed-description ol {
+  @apply list-decimal list-inside mb-4 space-y-1;
+}
+
+.detailed-description blockquote {
+  @apply border-l-4 border-emerald-500 pl-4 italic text-stone-500 my-4;
+}
+
+.detailed-description a {
+  @apply text-emerald-600 underline hover:text-emerald-700;
+}
+
+.detailed-description strong {
+  @apply font-bold text-stone-900;
+}

@@ -273,21 +273,29 @@ export const ProductDetails: React.FC = () => {
               </span>
             </div>
             <h1 className="text-4xl font-bold text-stone-900 mb-2">{product.name}</h1>
-            <div className="flex items-center gap-4 text-stone-500">
-              {reviews.length > 0 && (
-                <div className="flex items-center gap-1.5 pr-4 border-r border-stone-200">
-                  <div className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star 
-                        key={star} 
-                        className={`w-3.5 h-3.5 ${star <= Math.round(averageRating) ? 'text-amber-400 fill-current' : 'text-stone-200'}`} 
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm font-bold text-stone-900">{(averageRating || 0).toFixed(1)}</span>
-                  <span className="text-xs text-stone-400">({reviews.length})</span>
+            
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-0.5">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star 
+                      key={star} 
+                      className={`w-5 h-5 ${star <= Math.round(averageRating) ? 'text-amber-400 fill-current' : 'text-stone-200'}`} 
+                    />
+                  ))}
                 </div>
-              )}
+                <span className="text-xl font-bold text-stone-900">{(averageRating || 0).toFixed(1)}</span>
+              </div>
+              <span className="text-stone-300">|</span>
+              <button 
+                onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="text-emerald-700 font-bold hover:text-emerald-800 transition-colors"
+              >
+                {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'}
+              </button>
+            </div>
+
+            <div className="flex items-center gap-4 text-stone-500">
               <Link to={`/farmer/${product.farmerId}`} className="flex items-center gap-1 hover:text-emerald-700 transition-colors">
                 <span className="font-medium">{product.farmerName}</span>
                 {farmer?.isVerified && (
@@ -520,7 +528,7 @@ export const ProductDetails: React.FC = () => {
       </div>
 
       {/* Reviews Section */}
-      <div className="mt-16 pt-16 border-t border-stone-100">
+      <div id="reviews-section" className="mt-16 pt-16 border-t border-stone-100">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
           <div>
             <h2 className="text-3xl font-bold text-stone-900 mb-2">Customer Reviews</h2>

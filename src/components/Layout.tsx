@@ -53,15 +53,16 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center gap-2 text-emerald-700 font-bold text-xl tracking-tight">
+              <a href="/" className="flex items-center gap-2 text-emerald-700 font-bold text-xl tracking-tight">
                 <Leaf className="w-6 h-6" />
                 <span>FarmLink</span>
-              </Link>
+              </a>
             </div>
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-8">
               <Link to="/marketplace" className="text-stone-600 hover:text-emerald-700 transition-colors font-medium">Marketplace</Link>
+              <a href="/guides" className="text-stone-600 hover:text-emerald-700 transition-colors font-medium">Guides</a>
               {user ? (
                 <>
                   {profile?.role === 'admin' && (
@@ -215,7 +216,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <h4 className="font-bold mb-4">Platform</h4>
               <ul className="space-y-2 text-stone-500 text-sm">
                 <li><Link to="/marketplace" className="hover:text-emerald-700 transition-colors">Marketplace</Link></li>
-                <li><Link to="/guides" className="hover:text-emerald-700 transition-colors">Platform Guides</Link></li>
+                <li><a href="/guides" className="hover:text-emerald-700 transition-colors">Platform Guides</a></li>
                 <li><Link to="/how-it-works" className="hover:text-emerald-700 transition-colors">How it Works</Link></li>
                 <li><Link to="/pricing" className="hover:text-emerald-700 transition-colors">Pricing</Link></li>
               </ul>
@@ -225,8 +226,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <ul className="space-y-2 text-stone-500 text-sm">
                 <li><Link to="/help" className="hover:text-emerald-700 transition-colors">Help Center</Link></li>
                 <li><Link to="/contact" className="hover:text-emerald-700 transition-colors">Contact Us</Link></li>
-                <li><Link to="/privacy" className="hover:text-emerald-700 transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="hover:text-emerald-700 transition-colors">Terms of Service</Link></li>
+                <li><a href="/privacy" className="hover:text-emerald-700 transition-colors">Privacy Policy</a></li>
+                <li><a href="/terms" className="hover:text-emerald-700 transition-colors">Terms of Service</a></li>
               </ul>
             </div>
           </div>

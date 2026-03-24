@@ -21,34 +21,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let unsubscribeProfile: (() => void) | null = null;
 
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
-      // Clean up any previous profile listener before switching users
+      setUser(firebaseUser);
+      
       if (unsubscribeProfile) {
         unsubscribeProfile();
         unsubscribeProfile = null;
       }
 
-      setUser(firebaseUser);
-
-      if (!firebaseUser) {
+      if (firebaseUser) {
+        unsubscribeProfile = onSnapshot(doc(db, 'users', firebaseUser.uid), (docSnap) => {
+          if (docSnap.exists()) {
+            setProfile(docSnap.data() as UserProfile);
+          } else {
+            setProfile(null);
+          }
+          setLoading(false);
+        }, (error) => {
+          console.error("Error fetching profile:", error);
+          setLoading(false);
+        });
+      } else {
         setProfile(null);
         setLoading(false);
-        return;
       }
-
-      // Subscribe to the user's profile document immediately within the same
-      // auth callback, eliminating the window where `user` is set but
-      // `profile` is still null.
-      unsubscribeProfile = onSnapshot(
-        doc(db, 'users', firebaseUser.uid),
-        (docSnap) => {
-          setProfile(docSnap.exists() ? (docSnap.data() as UserProfile) : null);
-          setLoading(false);
-        },
-        (error) => {
-          console.error('Error fetching profile:', error);
-          setLoading(false);
-        }
-      );
     });
 
     return () => {

@@ -15,8 +15,8 @@ import { exportOrderToPDF, exportOrdersToPDF } from '../services/pdfService';
 
 export const AdminDashboard: React.FC = () => {
   const { profile } = useAuth();
-  const [activeTab, setActiveTab] = useState('farmers');
-  const [farmers, setFarmers] = useState<UserProfile[]>([]);
+  const [activeTab, setActiveTab] = useState('sellers');
+  const [sellers, setSellers] = useState<UserProfile[]>([]);
   const [buyers, setBuyers] = useState<UserProfile[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -30,7 +30,7 @@ export const AdminDashboard: React.FC = () => {
   });
 
   const menuItems = [
-    { id: 'farmers', label: 'Farmers', icon: Users },
+    { id: 'sellers', label: 'Sellers', icon: Users },
     { id: 'buyers', label: 'Buyers', icon: User },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'orders', label: 'Orders', icon: ShoppingBag },
@@ -43,10 +43,10 @@ export const AdminDashboard: React.FC = () => {
   useEffect(() => {
     if (profile?.role !== 'admin') return;
 
-    // Fetch Farmers
-    const farmersQuery = query(collection(db, 'users'), where('role', '==', 'farmer'));
-    const unsubscribeFarmers = onSnapshot(farmersQuery, (snapshot) => {
-      setFarmers(snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
+    // Fetch Farmers and Sellers (Retailers)
+    const sellersQuery = query(collection(db, 'users'), where('role', 'in', ['farmer', 'retailer']));
+    const unsubscribeSellers = onSnapshot(sellersQuery, (snapshot) => {
+      setSellers(snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
     });
 
     // Fetch Buyers
@@ -70,7 +70,7 @@ export const AdminDashboard: React.FC = () => {
     setLoading(false);
 
     return () => {
-      unsubscribeFarmers();
+      unsubscribeSellers();
       unsubscribeBuyers();
       unsubscribeProducts();
       unsubscribeOrders();
@@ -82,7 +82,7 @@ export const AdminDashboard: React.FC = () => {
       await updateDoc(doc(db, 'users', farmerId), {
         isVerified: !currentStatus
       });
-      showToast(`Farmer ${!currentStatus ? 'verified' : 'unverified'} successfully`);
+      showToast(`Seller ${!currentStatus ? 'verified' : 'unverified'} successfully`);
     } catch (error) {
       console.error("Error updating verification status:", error);
       showToast('Failed to update verification status', 'error');
@@ -121,13 +121,14 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  const filteredFarmers = farmers.filter(farmer => {
-    const matchesSearch = farmer.displayName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         farmer.farmName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         farmer.email.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredSellers = sellers.filter(seller => {
+    const matchesSearch = seller.displayName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         seller.farmName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         seller.businessName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         seller.email.toLowerCase().includes(searchTerm.toLowerCase());
     
-    if (filter === 'verified') return matchesSearch && farmer.isVerified;
-    if (filter === 'unverified') return matchesSearch && !farmer.isVerified;
+    if (filter === 'verified') return matchesSearch && seller.isVerified;
+    if (filter === 'unverified') return matchesSearch && !seller.isVerified;
     return matchesSearch;
   });
 
@@ -217,21 +218,21 @@ export const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          {activeTab === 'farmers' && (
+          {activeTab === 'sellers' && (
             <div className="space-y-8">
               {/* Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-3xl border border-stone-100 shadow-sm">
-                  <p className="text-stone-400 text-sm font-bold uppercase tracking-wider mb-1">Total Farmers</p>
-                  <p className="text-3xl font-bold text-stone-900">{farmers.length}</p>
+                  <p className="text-stone-400 text-sm font-bold uppercase tracking-wider mb-1">Total Sellers</p>
+                  <p className="text-3xl font-bold text-stone-900">{sellers.length}</p>
                 </div>
                 <div className="bg-white p-6 rounded-3xl border border-stone-100 shadow-sm">
                   <p className="text-stone-400 text-sm font-bold uppercase tracking-wider mb-1">Verified</p>
-                  <p className="text-3xl font-bold text-emerald-600">{farmers.filter(f => f.isVerified).length}</p>
+                  <p className="text-3xl font-bold text-emerald-600">{sellers.filter(f => f.isVerified).length}</p>
                 </div>
                 <div className="bg-white p-6 rounded-3xl border border-stone-100 shadow-sm">
                   <p className="text-stone-400 text-sm font-bold uppercase tracking-wider mb-1">Pending</p>
-                  <p className="text-3xl font-bold text-amber-500">{farmers.filter(f => !f.isVerified).length}</p>
+                  <p className="text-3xl font-bold text-amber-500">{sellers.filter(f => !f.isVerified).length}</p>
                 </div>
               </div>
 
@@ -245,36 +246,48 @@ export const AdminDashboard: React.FC = () => {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-stone-50 border-b border-stone-100">
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-stone-400">Farmer</th>
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-stone-400">Contact</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-stone-400">Seller</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-stone-400">Business/Farm</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-stone-400">Location</th>
                       <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-stone-400">Status</th>
                       <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-stone-400 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100">
-                    {filteredFarmers.map((farmer) => (
-                      <tr key={farmer.uid} className="hover:bg-stone-50 transition-colors">
+                    {filteredSellers.map((seller) => (
+                      <tr key={seller.uid} className="hover:bg-stone-50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-stone-100 overflow-hidden">
-                              {farmer.photoURL ? <img src={farmer.photoURL} alt="" className="w-full h-full object-cover" /> : <User className="w-full h-full p-2 text-stone-400" />}
+                              {seller.photoURL ? <img src={seller.photoURL} alt="" className="w-full h-full object-cover" /> : <User className="w-full h-full p-2 text-stone-400" />}
                             </div>
                             <div>
                               <div className="flex items-center gap-1.5">
-                                <p className="font-bold text-stone-900">{farmer.displayName}</p>
-                                {farmer.isVerified && (
-                                  <ShieldCheck className="w-4 h-4 text-emerald-600" title="Verified Farmer" />
+                                <p className="font-bold text-stone-900">{seller.displayName}</p>
+                                {seller.isVerified && (
+                                  <ShieldCheck className="w-4 h-4 text-emerald-600" aria-label="Verified Seller" />
                                 )}
                               </div>
-                              <p className="text-xs text-stone-500">{farmer.farmName || 'No Farm Name'}</p>
+                              <p className="text-xs text-stone-500">{seller.email}</p>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <p className="text-sm text-stone-600">{farmer.email}</p>
+                          <p className="text-sm font-medium text-stone-900">
+                            {seller.role === 'farmer' ? (seller.farmName || 'N/A') : (seller.businessName || 'N/A')}
+                          </p>
                         </td>
                         <td className="px-6 py-4">
-                          {farmer.isVerified ? (
+                          <p className="text-sm text-stone-600">
+                            {seller.location?.address ? (
+                              seller.location.address.split(',').length > 1 
+                                ? seller.location.address.split(',').slice(-2).join(',').trim()
+                                : seller.location.address
+                            ) : 'N/A'}
+                          </p>
+                        </td>
+                        <td className="px-6 py-4">
+                          {seller.isVerified ? (
                             <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">Verified</span>
                           ) : (
                             <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold">Unverified</span>
@@ -282,14 +295,14 @@ export const AdminDashboard: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <button 
-                            onClick={() => toggleVerification(farmer.uid, !!farmer.isVerified)}
+                            onClick={() => toggleVerification(seller.uid, !!seller.isVerified)}
                             className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
-                              farmer.isVerified 
+                              seller.isVerified 
                                 ? 'bg-stone-100 text-stone-600 hover:bg-stone-200' 
                                 : 'bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow-md'
                             }`}
                           >
-                            {farmer.isVerified ? (
+                            {seller.isVerified ? (
                               <>
                                 <ShieldAlert className="w-3.5 h-3.5" />
                                 Revoke
@@ -297,7 +310,7 @@ export const AdminDashboard: React.FC = () => {
                             ) : (
                               <>
                                 <ShieldCheck className="w-3.5 h-3.5" />
-                                Verify Farmer
+                                Verify Seller
                               </>
                             )}
                           </button>
